@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>psi-monitor — Pressure Stall Information monitor</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1e1e2e;  /* Catppuccin Mocha base */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Fira Code', 'Cascadia Code', monospace;
+    padding: 40px;
+  }
+
+  .terminal {
+    background: #181825;  /* mantle */
+    border-radius: 12px;
+    padding: 24px 28px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    border: 1px solid #313244;  /* surface0 */
+    max-width: 980px;
+    width: 100%;
+  }
+
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #313244;
+  }
+
+  .terminal-dot { width: 14px; height: 14px; border-radius: 50%; }
+  .dot-red { background: #f38ba8; }
+  .dot-yellow { background: #f9e2af; }
+  .dot-green { background: #a6e3a1; }
+
+  .terminal-title {
+    color: #6c7086;
+    font-size: 14px;
+    margin-left: 8px;
+    letter-spacing: 0.3px;
+  }
+  .terminal-title span { color: #a6adc8; }
+
+  .output {
+    color: #cdd6f4;
+    font-size: 14px;
+    line-height: 1.75;
+    white-space: pre;
+  }
+  .output .cmd { color: #a6adc8; font-weight: 600; }
+  .output .cmd::before { content: "$ "; color: #a6e3a1; font-weight: 600; }
+
+  .output .banner { color: #89b4fa; font-weight: 600; }
+  .output .hdr { color: #6c7086; }
+  .output .name { color: #89dceb; }
+  .output .kind { color: #cba6f7; }
+  .output .ok { color: #a6e3a1; font-weight: 600; }
+  .output .warn { color: #f9e2af; font-weight: 600; }
+  .output .num { color: #a6e3a1; }
+  .output .stall { color: #f5c2e7; }
+  .output .load { color: #fab387; }
+  .output .dim { color: #585b70; }
+  .output .json-key { color: #89dceb; }
+  .output .json-str { color: #a6e3a1; }
+  .output .json-num { color: #f9e2af; }
+
+  .output .section { margin-top: 14px; }
+  .output .footer { color: #6c7086; }
+
+  .prompt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #313244;
+  }
+  .prompt-symbol { color: #a6e3a1; font-size: 14px; font-weight: 600; }
+  .prompt-text { color: #6c7086; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="terminal">
+  <div class="terminal-header">
+    <div class="terminal-dot dot-red"></div>
+    <div class="terminal-dot dot-yellow"></div>
+    <div class="terminal-dot dot-green"></div>
+    <div class="terminal-title"><span>$</span> ./psi-monitor — Pressure Stall Information monitor</div>
+  </div>
+
+  <div class="output"><span class="banner">psi-monitor — Pressure Stall Information (PSI) monitor (C++23)</span>
+
+<span class="cmd">./psi-monitor</span>
+  <span class="hdr">RESOURCE  TYPE   AVG10   AVG60  AVG300    STALL</span>
+  <span class="name">cpu</span>      <span class="kind">some</span>   <span class="num">0.00%</span>   <span class="num">0.00%</span>  <span class="num">0.00%</span>   <span class="stall">16.3B us</span>
+  <span class="name">cpu</span>      <span class="kind">full</span>   <span class="num">0.00%</span>   <span class="num">0.00%</span>  <span class="num">0.00%</span>   <span class="stall">    0 us</span>
+  <span class="name">memory</span>   <span class="kind">some</span>   <span class="num">0.00%</span>   <span class="num">0.00%</span>  <span class="num">0.00%</span>   <span class="stall">876.7M us</span>
+  <span class="name">memory</span>   <span class="kind">full</span>   <span class="num">0.00%</span>   <span class="num">0.00%</span>  <span class="num">0.00%</span>   <span class="stall">760.9M us</span>
+  <span class="name">io</span>      <span class="kind">some</span>   <span class="num">0.00%</span>   <span class="num">0.02%</span>  <span class="num">0.00%</span>   <span class="stall">8.0B us</span>
+  <span class="name">io</span>      <span class="kind">full</span>   <span class="num">0.00%</span>   <span class="num">0.02%</span>  <span class="num">0.00%</span>   <span class="stall">7.1B us</span>
+
+  <span class="load">load</span>   <span class="num">0.86</span>  <span class="num">0.81</span>  <span class="num">0.70</span>     <span class="dim">1/713 procs    last pid 1268971</span>
+  <span class="load">uptime</span> <span class="num">20d 07:45:27</span>        <span class="dim">idle 67d 12:54:12 (4 cores)</span>
+
+  <span class="ok">✓ no pressure detected</span> <span class="dim">— max avg10 0.00%</span>
+
+<span class="cmd">./psi-monitor --watch 2</span>
+  <span class="dim">refreshing every 2s — Ctrl+C to stop</span>
+  <span class="ok">✓ no pressure detected</span> <span class="dim">— max avg10 0.00%</span>
+
+<span class="cmd">./psi-monitor --json</span>
+  <span class="dim">{</span>
+    <span class="dim">"resources": {</span>
+      <span class="json-key">"cpu"</span>: {<span class="json-str">"some"</span>: {<span class="json-key">"avg10"</span>:<span class="json-num">0.00</span>,<span class="json-key">"avg60"</span>:<span class="json-num">0.00</span>,<span class="json-key">"avg300"</span>:<span class="json-num">0.00</span>,<span class="json-key">"total"</span>:<span class="json-num">16309673697</span>},<span class="json-str">"full"</span>: {<span class="json-key">"total"</span>:<span class="json-num">0</span>}},
+      <span class="json-key">"io"</span>: {<span class="json-str">"some"</span>: {<span class="json-key">"avg10"</span>:<span class="json-num">0.00</span>,<span class="json-key">"avg60"</span>:<span class="json-num">0.02</span>,<span class="json-key">"total"</span>:<span class="json-num">7974965702</span>}}
+    <span class="dim">},</span>
+    <span class="dim">"loadavg": {</span><span class="json-key">"l1"</span>:<span class="json-num">0.86</span>,<span class="json-key">"l5"</span>:<span class="json-num">0.81</span>,<span class="json-key">"l15"</span>:<span class="json-num">0.70</span>,<span class="json-key">"running"</span>:<span class="json-num">1</span>,<span class="json-key">"total"</span>:<span class="json-num">713</span><span class="dim">}</span>,
+    <span class="dim">"uptime": {</span><span class="json-key">"seconds"</span>:<span class="json-num">1755862.56</span>,<span class="json-key">"cores"</span>:<span class="json-num">4</span><span class="dim">}</span>
+  <span class="dim">}</span>
+
+<span class="cmd">./psi-monitor --selftest</span>
+  <span class="ok">13/13 selftests passed</span> <span class="dim">(parser PSI / umbrales / loadavg / formatos — incl. lectura real de /proc/pressure)</span>
+
+<span class="footer">kernel PSI 4.20+ · /proc/pressure/{cpu,memory,io} · avg10/60/300 · exit codes 0/2 — ./psi-monitor --help</span></div>
+
+  <div class="prompt">
+    <div class="prompt-symbol">❯</div>
+    <div class="prompt-text">psi-monitor v1.0 — C++23, zero external dependencies</div>
+  </div>
+</div>
+</body>
+</html>
